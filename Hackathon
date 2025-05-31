@@ -1,0 +1,92 @@
+let a = [ 
+  { userID: 1, Name: "Jhon" }, 
+  { userID: 2, Name: "Jane" },
+  { userID: 3, Name: "Jon" },
+   { userID: 4, Name: "Jai" } ,
+   { userID: 5, Name: "abid" } 
+] 
+ 
+let b = [ 
+  { userID: 1, DateOfBirth: "02-05-2000" }, 
+  { userID: 3, DateOfBirth: "15-08-1998" }, 
+  { userID: 4, DateOfBirth: "12-08-1998" }, 
+  { userID: 5, DateOfBirth: "08-05-2000" },
+] 
+
+function Task1(a,b){
+    
+    let MergeData={}
+    for(let val of a){
+        MergeData[val.userID]={
+            userID:val.userID,
+            Name:val.Name || null,
+            DateOfBirth:val.DateOfBirth || null
+        }
+    }
+    for(let val of b){
+        if(MergeData.hasOwnProperty(val.userID)){
+            MergeData[val.userID].DateOfBirth=val.DateOfBirth ||null
+        }else{
+            MergeData[val.userID]={
+            userID:val.userID,
+            Name:null,
+            DateOfBirth:val.DateOfBirth||null
+        }
+        }
+    }
+    let result=Object.values(MergeData)
+    // console.log(result)
+    let countName=0
+    let countDateOfBirth=0
+    for(let i=0;i<result.length;i++){
+      if(!result[i].Name){
+          countName++
+      }else if(!result[i].DateOfBirth){
+          countDateOfBirth++
+      }
+    }
+    
+    
+    let analysis={}
+    let countTotalMember=0
+    for(let i=0;i<result.length;i++){
+        if(result[i].DateOfBirth){
+            let month=result[i].DateOfBirth
+            let val=month.slice(3,10)
+           if(analysis.hasOwnProperty(val)){
+               let increaceCount=++countTotalMember
+               analysis[val].count=increaceCount
+                  if(analysis[val].youngest.DateOfBirth.toString()>month.toString()){
+                   analysis[val]={
+                     count:increaceCount,
+                     youngest:{ userID:result[i].userID,
+                     Name:result[i].Name,
+                     DateOfBirth:result[i].DateOfBirth,}
+                 }
+               }
+           }else{
+            
+               analysis[val]={
+                     count:++countTotalMember,
+                    youngest: {userID:result[i].userID,
+                     Name:result[i].Name,
+                     DateOfBirth:result[i].DateOfBirth,}
+                 }
+               
+           }
+               
+               
+        }
+    }
+     let finalResult= {
+         task1:result,
+         nameMissingCount:countName,
+         dateOfBirthMissingCount:countDateOfBirth,
+         monthYearStats:analysis
+     }
+     console.log(finalResult.monthYearStats)
+     return finalResult
+    
+}
+let FinalTask=Task1(a,b)
+console.log(FinalTask)
